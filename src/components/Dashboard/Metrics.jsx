@@ -6,10 +6,10 @@ import CardContent from '@material-ui/core/CardContent';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
-  card: {
-    width: '40%',
-    marginRight: '0.5rem',
-    marginBottom: '0.5rem',
+  cardContent: {
+    width: '20%',
+    marginRight: '0.25rem',
+    marginBottom: '0.25rem',
   },
 });
 
@@ -35,7 +35,7 @@ export default ({ metricProp }) => {
   if (!data) return <Chip label="Metrics not found" />;
 
   return (
-    <Card className={classes.card}>
+    <Card className={classes.cardContent}>
       <CardContent>
         <Typography variant="h6">{metricProp}</Typography>
         <Typography variant="h5">

@@ -6,6 +6,9 @@ import makeAnimated from 'react-select/animated';
 import { LinearProgress, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Chip from '@material-ui/core/Chip';
+import {
+  ResponsiveContainer,
+} from 'recharts';
 import Metrics from './Metrics';
 import Graph from './Graph';
 
@@ -57,15 +60,14 @@ export default () => {
       </div>
       <div>
         {metrics.map((metric, index) => (
-          <Metrics metricProp={metric} key={index} />
+          <>
+            <Metrics metricProp={metric} key={index} />
+            <ResponsiveContainer width="70%" height="50%">
+              <Graph metricProp={metric} key={index} />
+            </ResponsiveContainer>
+          </>
         ))}
       </div>
-      {/* <div>
-        {metrics.map((metric, index) => (
-          <GraphData metricProp={metric} key={index} />
-        ))}
-      </div> */}
-      <Graph />
     </>
   );
 };

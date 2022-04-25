@@ -1,50 +1,50 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react';
+import { gql, useQuery } from '@apollo/client';
+import { Typography, Chip } from '@material-ui/core';
 import {
   LineChart,
-  Line,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
   Legend,
-  ResponsiveContainer,
+  Line,
 } from 'recharts';
-import { gql, useQuery } from '@apollo/client';
-import { Typography, Chip } from '@material-ui/core';
 
-export default () => {
-  const [metrics, setMetrics] = useState([]);
-
-  const query = gql`
-    query lastKnown($metric: String!) {
-      getLastKnownMeasurement(metricName: $metric) {
-        value
-        unit
-      }
+const query = gql`
+  query lastKnown($metric: String!) {
+    getLastKnownMeasurement(metricName: $metric) {
+      value
+      unit
+      at
     }
-  `;
+  }
+`;
 
+export default ({ metricProp }) => {
+  const [metrics, setMetrics] = useState([]);
   const { data, error, loading } = useQuery(query, {
-    variables: { metric: 'tubingPressure' },
+    variables: { metric: metricProp },
     fetchPolicy: 'network-only',
     pollInterval: 1300,
-    onCompleted: () => setMetrics([...metrics, data.getLastKnownMeasurement]),
+    onCompleted: () => {
+      const date = new Date(data.getLastKnownMeasurement.at);
+      const hour = date.getHours();
+      const minutes = date.getMinutes();
+      data.getLastKnownMeasurement.at = `${hour}:${minutes}`;
+      setMetrics([...metrics, data.getLastKnownMeasurement]);
+    },
   });
 
   if (loading) return <Typography> loading... </Typography>;
   if (error) return <Typography color="error">{error}</Typography>;
   if (!data) return <Chip label="Metrics not found" />;
 
-  console.log(metrics);
-
   return (
-    // <></>
-    <ResponsiveContainer width="70%" height="50%">
+    <>
       <LineChart
-        width={500}
+        width={700}
         height={300}
-        data={metrics}
         margin={{
           top: 5,
           right: 30,
@@ -53,47 +53,19 @@ export default () => {
         }}
       >
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="unit" />
+        <XAxis dataKey="at" />
         <YAxis />
         <Tooltip />
         <Legend />
         <Line
+          data={metrics}
+          label={metricProp}
           type="monotone"
           dataKey="value"
           stroke="#8884d8"
           activeDot={{ r: 8 }}
         />
-        {/* <Line type="monotone" dataKey="value" stroke="#82ca9d" /> */}
       </LineChart>
-    </ResponsiveContainer>
+    </>
   );
 };
-
-// export default () => (
-//   <ResponsiveContainer width="70%" height="50%">
-//     <LineChart
-//       width={500}
-//       height={300}
-//       data={data}
-//       margin={{
-//         top: 5,
-//         right: 30,
-//         left: 20,
-//         bottom: 5,
-//       }}
-//     >
-//       <CartesianGrid strokeDasharray="3 3" />
-//       <XAxis dataKey="value" />
-//       <YAxis />
-//       <Tooltip />
-//       <Legend />
-//       <Line
-//         type="monotone"
-//         dataKey="value"
-//         stroke="#8884d8"
-//         activeDot={{ r: 8 }}
-//       />
-//       {/* <Line type="monotone" dataKey="uv" stroke="#82ca9d" /> */}
-//     </LineChart>
-//   </ResponsiveContainer>
-// );
