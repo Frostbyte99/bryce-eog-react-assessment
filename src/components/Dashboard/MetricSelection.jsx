@@ -4,6 +4,7 @@ import { useQuery, gql } from '@apollo/client';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import { LinearProgress, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import Chip from '@material-ui/core/Chip';
 import Metrics from './Metrics';
 import Graph from './Graph';
@@ -16,12 +17,21 @@ const metricQuery = gql`
   }
 `;
 
+const useStyles = makeStyles({
+  selection: {
+    float: 'right',
+    width: '50%',
+  },
+});
+
 export default () => {
   const [metrics, setMetrics] = useState([]);
 
   const onChange = (option) => {
     setMetrics((option || []).map(({ value }) => value));
   };
+
+  const styles = useStyles();
 
   const { loading, error, data } = useQuery(metricQuery);
 
@@ -36,21 +46,26 @@ export default () => {
 
   return (
     <>
-      <Select
-        options={options}
-        onChange={onChange}
-        isMulti
-        components={animatedComponent}
-        closeMenuOnSelect={false}
-      />
+      <div className={styles.selection}>
+        <Select
+          options={options}
+          onChange={onChange}
+          isMulti
+          components={animatedComponent}
+          closeMenuOnSelect={false}
+        />
+      </div>
       <div>
         {metrics.map((metric, index) => (
           <Metrics metricProp={metric} key={index} />
         ))}
       </div>
-      <div>
-        <Graph />
-      </div>
+      {/* <div>
+        {metrics.map((metric, index) => (
+          <GraphData metricProp={metric} key={index} />
+        ))}
+      </div> */}
+      <Graph />
     </>
   );
 };
