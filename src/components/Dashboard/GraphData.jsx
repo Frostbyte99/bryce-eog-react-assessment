@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable array-callback-return */
 import React, { useState, useEffect } from 'react';
 import { gql, useQuery } from '@apollo/client';
@@ -19,15 +20,14 @@ const query = gql`
 `;
 
 export default ({ metricSelection }) => {
-  if (metricSelection === undefined) {
-    return <></>;
-  }
-
   const [metrics, setMetrics] = useState([]);
   const [queryArgs, setQueryArgs] = useState([]);
 
+  const historical = new Date() - 30 * 60 * 1000;
+
   useEffect(() => {
-    const historical = new Date() - 30 * 60 * 1000;
+    setQueryArgs([]);
+    setMetrics([]);
     metricSelection.map((metric) => {
       setQueryArgs([
         ...queryArgs,
