@@ -20,8 +20,6 @@ const query = gql`
 
 export default ({ metricSelection }) => {
   if (metricSelection === undefined) {
-    console.log('undefined');
-    console.log(metricSelection);
     return <></>;
   }
 
