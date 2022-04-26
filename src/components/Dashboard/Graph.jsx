@@ -1,6 +1,3 @@
-/* eslint-disable no-plusplus */
-/* eslint-disable no-bitwise */
-/* eslint-disable react/no-array-index-key */
 import React from 'react';
 import {
   LineChart,
@@ -44,10 +41,9 @@ export default ({ metricData }) => (
       />
       <YAxis yAxisId="F" dataKey="value" label={{ value: 'F', position: 'insideTopLeft', dy: -10 }} />
       <YAxis yAxisId="%" dataKey="value" label={{ value: '%', position: 'insideTopLeft', dy: -10 }} min={0} max={100} />
-      {metricData.map((metric, index) => (
+      {metricData.map((metric) => (
         <>
           <Line
-            key={index}
             data={metric.measurements}
             type="monotone"
             dataKey="value"
