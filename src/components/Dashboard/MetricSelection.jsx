@@ -60,7 +60,7 @@ export default () => {
           <Metrics metricProp={metric} key={index} />
         ))}
       </div>
-      <GraphData metricSelection={metrics} />
+      {(metrics.length !== 0) ? <GraphData metricSelection={metrics} /> : null}
     </>
   );
 };
