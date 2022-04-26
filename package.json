@@ -15,6 +15,7 @@
     "graphql": "^14.5.8",
     "isomorphic-fetch": "^2.2.1",
     "jest": "^27.5.1",
+    "moment": "^2.29.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-redux": "^8.0.0",
@@ -24,6 +25,7 @@
     "rebound": "^0.1.0",
     "recharts": "^2.1.9",
     "redux": "^4.2.0",
+    "string-to-color": "^2.2.2",
     "subscriptions-transport-ws": "^0.9.19"
   },
   "scripts": {
